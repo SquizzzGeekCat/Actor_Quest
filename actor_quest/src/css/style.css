@@ -1,4 +1,68 @@
 body {
-  padding: 0;
-  margin: 0;
+  padding: 0em;
+  margin: 0em;
+}
+main {
+  display: grid;
+  width: 100%;
+  grid-template-areas:
+    "search search show show likes"
+    "res res show show likes"
+    "res res movies movies likes"
+    "histo histo movies movies likes"
+    "histo histo movies movies likes";
+  gap: 1em;
+  justify-items: center;
+  justify-content: center;
+}
+header,
+footer {
+  display: flex;
+  justify-content: center;
+  background-color: blanchedalmond;
+}
+header {
+  margin-bottom: 0.5em;
+}
+footer {
+  margin-top: 0.5em;
+}
+section {
+  width: 30vw;
+  min-height: 3em;
+}
+aside {
+  width: 15vw;
+}
+#search {
+  grid-area: search;
+}
+#res {
+  grid-area: res;
+  background-color: lightpink;
+}
+#movies {
+  grid-area: movies;
+  background-color: lightyellow;
+}
+#histo {
+  grid-area: histo;
+  background-color: lightblue;
+}
+#show {
+  grid-area: show;
+  background-color: lightgreen;
+}
+#likes {
+  grid-area: likes;
+  background-color: lightgray;
+}
+.card {
+  width: 10em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.card p {
+  text-align: center;
 }
