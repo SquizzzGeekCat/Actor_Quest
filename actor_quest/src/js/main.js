@@ -12,8 +12,6 @@ buttonSearch.addEventListener("click", () => {
   input.value = "";
   const actor = connectApi(query);
   if (typeof actor != "undefined") {
-    const card2 = createCard(actor["name"], actor["id"]);
-    res.appendChild(card2);
     console.log(actor);
     return actor;
   } else {
