@@ -1,4 +1,5 @@
-const Token = "e42d6f1a51cc5297caa8a08716db0a5e";
+import { TOKEN } from "./dotenv.js";
+import { URL_API } from "./dotenv.js";
 //let string = "johnny depp";
 //const query = replaceSpace(string);
 
@@ -9,7 +10,7 @@ function connectApi(query) {
   };
 
   fetch(
-    `https://api.themoviedb.org/3/search/person?query=${query}&include_adult=false&language=en_US&api_key=${Token}`,
+    `${URL_API}person?query=${query}&include_adult=false&language=en_US&api_key=${TOKEN}`,
     requestOptions
   )
     .then((response) => response.text())
