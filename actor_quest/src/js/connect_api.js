@@ -3,7 +3,7 @@ import { URL_API } from "./dotenv.js";
 //let string = "johnny depp";
 //const query = replaceSpace(string);
 
-function connectApi(query) {
+export default function connectApi(query) {
   const requestOptions = {
     method: "GET",
     redirect: "follow",
@@ -14,26 +14,10 @@ function connectApi(query) {
     requestOptions
   )
     .then((response) => response.text())
-    .then((result) => console.log(result))
+    .then((data) => {
+      const jsonData = JSON.parse(data);
+      const actor = jsonData.results[0];
+      console.log(actor);
+    })
     .catch((error) => console.error(error));
 }
-
-function replaceSpace(str) {
-  return str.replace(/ /g, "%20");
-}
-
-const buttonSearch = document.querySelector("button");
-
-buttonSearch.addEventListener("click", () => {
-  const input = document.getElementById("searchInput");
-  let string = input.value;
-  const query = replaceSpace(string);
-  input.value = "";
-  try {
-    const actor = connectApi(query);
-    console.log("API request sent successfully");
-    return actor;
-  } catch {
-    alert("Error connecting to the API. Please try again later.");
-  }
-});
