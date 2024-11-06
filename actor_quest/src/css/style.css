@@ -30,9 +30,26 @@ footer {
 section {
   width: 30vw;
   min-height: 3em;
+  max-height: 50vh;
+  overflow: auto;
 }
+/* Rend le scroll discret pour les navigateurs basés sur WebKit */
+::-webkit-scrollbar {
+  width: 8px; /* Largeur de la barre de scroll */
+}
+
+::-webkit-scrollbar-track {
+  background: transparent; /* Couleur de fond de la piste de scroll */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c8c7c7; /* Couleur de la barre de scroll */
+  border-radius: 4px; /* Coins arrondis de la barre de scroll */
+}
+
 aside {
   width: 15vw;
+  display: none;
 }
 #search {
   grid-area: search;
@@ -40,6 +57,9 @@ aside {
 #res {
   grid-area: res;
   background-color: lightpink;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 #movies {
   grid-area: movies;
@@ -58,11 +78,16 @@ aside {
   background-color: lightgray;
 }
 .card {
-  width: 10em;
+  width: 10vw;
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin: 0.5em;
 }
 .card p {
   text-align: center;
+}
+.card img {
+  max-width: 50vh;
+  max-height: 20vh;
 }

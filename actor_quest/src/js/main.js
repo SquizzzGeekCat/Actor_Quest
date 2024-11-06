@@ -10,20 +10,14 @@ buttonSearch.addEventListener("click", () => {
   let string = input.value;
   const query = replaceSpace(string);
   input.value = "";
-  const actor = connectApi(query);
-  if (typeof actor != "undefined") {
-    console.log(actor);
-    return actor;
-  } else {
-    console.log("Error connecting to the API. Please try again later.");
-  }
+  connectApi(query).then((actors) => {
+    for (const actor of actors) {
+      const name = actor.name;
+      const image = actor.profile_path;
+      const id = actor.id;
+      const card = createCard(id, name, image);
+      const res = document.getElementById("res");
+      res.appendChild(card);
+    }
+  });
 });
-
-const card = createCard(
-  "premiers card",
-  "Si tu lis ça va te chercher un café ! ça urgent!!"
-);
-
-const res = document.getElementById("res");
-
-res.appendChild(card);
