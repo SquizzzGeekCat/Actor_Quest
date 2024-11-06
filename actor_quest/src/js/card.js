@@ -1,3 +1,6 @@
+import { getDetails } from "./tools.js";
+import { showDetails } from "./tools.js";
+
 export default function createCard(id, name, image) {
   console.log("id dans create card " + id);
   console.log("name dans create card " + name);
@@ -18,9 +21,9 @@ export default function createCard(id, name, image) {
   p.textContent = name;
   card.appendChild(p);
 
-  card.addEventListener("click", () => {
-    console.log("click sur la carte " + id);
-    // TODO : Afficher les détails de l'acteur
+  card.addEventListener("click", async () => {
+    const detailActor = await getDetails(id);
+    showDetails(detailActor);
   });
   return card;
 }

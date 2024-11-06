@@ -8,7 +8,7 @@ export default function connectApi(query) {
   };
 
   return fetch(
-    `${URL_API}person?query=${query}&page=1&include_adult=false&language=en_US&api_key=${TOKEN}`,
+    `${URL_API}search/person?query=${query}&page=1&include_adult=false&language=en_US&api_key=${TOKEN}`,
     requestOptions
   )
     .then((response) => response.json())
