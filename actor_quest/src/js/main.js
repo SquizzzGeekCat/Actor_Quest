@@ -6,6 +6,8 @@ import replaceSpace from "./tools.js";
 const buttonSearch = document.querySelector("button");
 
 buttonSearch.addEventListener("click", () => {
+  const res = document.getElementById("res");
+  res.innerHTML = "";
   const input = document.getElementById("searchInput");
   let string = input.value;
   const query = replaceSpace(string);
