@@ -62,20 +62,24 @@ export async function getMovies(id) {
     requestOptions
   )
     .then((response) => response.json())
+    .then((data) => data.cast)
     .catch((error) => console.error(error));
-  console.log(data);
   return data;
 }
 
-// export function showMovies(movies) {
-//   const moviesContainer = document.querySelector("#movies");
-//   moviesContainer.innerHTML = "";
-//   movies.results.forEach((movie) => {
-//     moviesContainer.innerHTML += `
-//     <div class="card">
-//       <img src="https://image.tmdb.org/t/p/w200${movie.poster_path}" alt="${movie.title}">
-//       <h3>${movie.title}</h3>
-//       <p>${movie.release_date}</p>
-//     </div>`;
-//   });
-// }
+export function showMovies(movies) {
+  console.log("type of movies : ", typeof movies);
+  const moviesContainer = document.querySelector("#movies");
+  moviesContainer.innerHTML = "";
+  for (let i = 0; i < movies.length; i++) {
+    console.log(movies[i]);
+    moviesContainer.innerHTML += `
+    <div class="movieCard">
+      <img src="https://image.tmdb.org/t/p/w200${movies[i].poster_path}" alt="${movies[i].title}">
+      <div class="infosFilm">
+        <span>${movies[i].title}</span>
+        <p>${movies[i].release_date}</p>
+      </div>
+    </div>`;
+  }
+}

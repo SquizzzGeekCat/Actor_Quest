@@ -1,10 +1,7 @@
 import { addActiveClass, getDetails, removeActiveClass } from "./tools.js";
-import { showDetails, getMovies } from "./tools.js";
+import { showDetails, getMovies, showMovies } from "./tools.js";
 
 export default function createCard(id, name, image) {
-  console.log("id dans create card " + id);
-  console.log("name dans create card " + name);
-  console.log("image dans create card " + image);
   let card = document.createElement("div");
   card.classList.add("card");
 
@@ -26,7 +23,8 @@ export default function createCard(id, name, image) {
     showDetails(detailActor);
     removeActiveClass();
     addActiveClass(card);
-    getMovies(id);
+    const listMovies = await getMovies(id);
+    showMovies(listMovies);
   });
   return card;
 }
