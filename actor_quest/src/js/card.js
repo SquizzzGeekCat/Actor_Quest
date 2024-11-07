@@ -1,5 +1,5 @@
-import { getDetails } from "./tools.js";
-import { showDetails } from "./tools.js";
+import { addActiveClass, getDetails, removeActiveClass } from "./tools.js";
+import { showDetails, getMovies } from "./tools.js";
 
 export default function createCard(id, name, image) {
   console.log("id dans create card " + id);
@@ -24,6 +24,9 @@ export default function createCard(id, name, image) {
   card.addEventListener("click", async () => {
     const detailActor = await getDetails(id);
     showDetails(detailActor);
+    removeActiveClass();
+    addActiveClass(card);
+    getMovies(id);
   });
   return card;
 }
