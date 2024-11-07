@@ -6,15 +6,23 @@ export default function replaceSpace(str) {
 }
 
 export function storeInLocalstorage(actor) {
-  const data = JSON.stringify(actor);
-  localStorage.setItem("actor", data);
-  console.log("actor is pack in local Storage");
+  let histoClique = JSON.parse(localStorage.getItem("histoActor")) || [];
+  if (!histoClique.includes(actor)) {
+    histoClique.push(actor);
+    localStorage.setItem("histoActor", JSON.stringify(histoClique));
+    console.log("actor is pack in histoActor in the local Storage");
+  } else {
+    console.log("actor is already in histoActor in the local Storage");
+  }
 }
 
 export function getFromLocalstorage() {
-  const actor = localStorage.getItem("actor");
-  if (actor) {
-    return JSON.parse(actor);
+  const actors = localStorage.getItem("histoActor");
+  if (actors) {
+    const listActors = JSON.parse(actors);
+    listActors.forEach((actor) => {
+      showHisto(actor);
+    });
   } else {
     return null;
   }
@@ -40,6 +48,8 @@ export function showDetails(actor) {
     <p>${actor.place_of_birth}</p>
     <p>${actor.biography}</p>
     </div>`;
+  storeInLocalstorage(actor);
+  getFromLocalstorage();
 }
 
 export function removeActiveClass() {
@@ -82,4 +92,12 @@ export function showMovies(movies) {
       </div>
     </div>`;
   }
+}
+
+function showHisto(actor) {
+  const histo = document.querySelector("#histo");
+  histo.innerHTML += `
+  <div class="histoActor">
+    <p>${actor.name}</p>
+  </div>`;
 }

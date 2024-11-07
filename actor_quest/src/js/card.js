@@ -1,4 +1,9 @@
-import { addActiveClass, getDetails, removeActiveClass } from "./tools.js";
+import {
+  addActiveClass,
+  getDetails,
+  removeActiveClass,
+  storeInLocalstorage,
+} from "./tools.js";
 import { showDetails, getMovies, showMovies } from "./tools.js";
 
 export default function createCard(id, name, image) {
