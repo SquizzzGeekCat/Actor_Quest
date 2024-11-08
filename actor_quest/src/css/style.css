@@ -11,6 +11,10 @@ main {
     "res res movies movies likes"
     "histo histo movies movies likes"
     "histo histo movies movies likes";
+
+  /* TODO: changer taille des section par taille de la grid template row et col */
+  grid-template-columns: repeat(30vw, 1fr);
+  grid-template-rows: repeat(30vh, 1fr);
   gap: 1em;
   justify-items: center;
   justify-content: center;

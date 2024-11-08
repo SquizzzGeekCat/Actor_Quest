@@ -1,22 +1,33 @@
 import { URL_API } from "./env.js";
 import { TOKEN } from "./env.js";
 
+//fonctions pour transformer entrer user en string utilisable dans l'URL
 export default function replaceSpace(str) {
   return str.replace(/ /g, "%20");
 }
-
+// functions de local storage
 export function storeInLocalstorage(actor) {
-  let histoClique = JSON.parse(localStorage.getItem("histoActor")) || [];
-  if (!histoClique.includes(actor)) {
-    histoClique.push(actor);
-    localStorage.setItem("histoActor", JSON.stringify(histoClique));
-    console.log("actor is pack in histoActor in the local Storage");
+  let histo = JSON.parse(localStorage.getItem("histoActor")) || [];
+  if (histo.length > 0) {
+    for (let i = 0; i < histo.length; i++) {
+      if (histo[i].name === actor.name) {
+        console.log("actor is ALREADY added to local storage");
+        return;
+      } else {
+        histo.push(actor);
+        localStorage.setItem("histoActor", JSON.stringify(histo));
+        console.log("actor is ADDED in the local Storage");
+      }
+    }
   } else {
-    console.log("actor is already in histoActor in the local Storage");
+    histo.push(actor);
+    localStorage.setItem("histoActor", JSON.stringify(histo));
+    console.log("actor is ADDED in the local Storage");
   }
 }
 
 export function getFromLocalstorage() {
+  document.querySelector("#histo").innerHTML = "";
   const actors = localStorage.getItem("histoActor");
   if (actors) {
     const listActors = JSON.parse(actors);
@@ -28,10 +39,16 @@ export function getFromLocalstorage() {
   }
 }
 
+export function removeHisto() {
+  localStorage.removeItem("histoActor");
+  document.querySelector("#histo").innerHTML = "";
+}
+
+// fonctions pour recupere les details des acteurs
 export function getDetails(id) {
   const requestOptions = {
     method: "GET",
-    redirect: "follow",
+    redirect: "follow"
   };
   return fetch(`${URL_API}person/${id}?api_key=${TOKEN}`, requestOptions)
     .then((response) => response.json())
@@ -52,6 +69,7 @@ export function showDetails(actor) {
   getFromLocalstorage();
 }
 
+// fonction de design
 export function removeActiveClass() {
   const cards = document.querySelectorAll(".card");
   cards.forEach((card) => card.classList.remove("active"));
@@ -61,10 +79,11 @@ export function addActiveClass(card) {
   card.classList.add("active");
 }
 
+// fonctions pour recupere et traiter les films
 export async function getMovies(id) {
   const requestOptions = {
     method: "GET",
-    redirect: "follow",
+    redirect: "follow"
   };
 
   const data = await fetch(
@@ -78,11 +97,9 @@ export async function getMovies(id) {
 }
 
 export function showMovies(movies) {
-  console.log("type of movies : ", typeof movies);
   const moviesContainer = document.querySelector("#movies");
   moviesContainer.innerHTML = "";
   for (let i = 0; i < movies.length; i++) {
-    console.log(movies[i]);
     moviesContainer.innerHTML += `
     <div class="movieCard">
       <img src="https://image.tmdb.org/t/p/w200${movies[i].poster_path}" alt="${movies[i].title}">
@@ -94,6 +111,7 @@ export function showMovies(movies) {
   }
 }
 
+// fonctions pour l'historique
 function showHisto(actor) {
   const histo = document.querySelector("#histo");
   histo.innerHTML += `
@@ -101,3 +119,9 @@ function showHisto(actor) {
     <p>${actor.name}</p>
   </div>`;
 }
+
+// fonctions pour la recherche
+//TODO: amélioré la recherche avec input sup et requete sup et posibilité sup
+
+// fonctions des options
+//TODO: traiter les options - pagination - clique sur films pour affichage du cast acteurs - recherche
