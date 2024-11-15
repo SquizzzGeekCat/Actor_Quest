@@ -17,17 +17,19 @@ export function storeInLocalstorage(actor) {
         histo.push(actor);
         localStorage.setItem("histoActor", JSON.stringify(histo));
         console.log("actor is ADDED in the local Storage");
+        return;
       }
     }
   } else {
     histo.push(actor);
     localStorage.setItem("histoActor", JSON.stringify(histo));
     console.log("actor is ADDED in the local Storage");
+    return;
   }
 }
 
 export function getFromLocalstorage() {
-  document.querySelector("#histo").innerHTML = "";
+  document.querySelector("#histo ul").innerHTML = "";
   const actors = localStorage.getItem("histoActor");
   if (actors) {
     const listActors = JSON.parse(actors);
@@ -38,10 +40,22 @@ export function getFromLocalstorage() {
     return null;
   }
 }
-
+//TODO: a placer lors du chargement de la page
+export function chargeHisto() {
+  const actors = localStorage.getItem("histoActor");
+  if (actors) {
+    const listActors = JSON.parse(actors);
+    listActors.forEach((actor) => {
+      showHisto(actor);
+    });
+  } else {
+    return null;
+  }
+}
+//function qui supprime l'historique de nav de l'app
 export function removeHisto() {
   localStorage.removeItem("histoActor");
-  document.querySelector("#histo").innerHTML = "";
+  document.querySelector("#histo ul").innerHTML = "";
 }
 
 // fonctions pour recupere les details des acteurs
@@ -112,12 +126,19 @@ export function showMovies(movies) {
 }
 
 // fonctions pour l'historique
+function createLi(name) {
+  const li = document.createElement("li");
+  li.classList = "histolink";
+  console.log(name);
+  li.textContent = name;
+  return li;
+}
 function showHisto(actor) {
-  const histo = document.querySelector("#histo");
-  histo.innerHTML += `
-  <div class="histoActor">
-    <p>${actor.name}</p>
-  </div>`;
+  const histo = document.querySelector("#listActorsInHistorique");
+  const li = createLi(actor.name);
+  console.log(li);
+  console.log(histo);
+  histo.appendChild(li);
 }
 
 // fonctions pour la recherche
