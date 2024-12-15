@@ -11,6 +11,10 @@ main {
     "res res movies movies likes"
     "histo histo movies movies likes"
     "histo histo movies movies likes";
+
+  /* TODO: changer taille des section par taille de la grid template row et col */
+  grid-template-columns: repeat(30vw, 1fr);
+  grid-template-rows: repeat(30vh, 1fr);
   gap: 1em;
   justify-items: center;
   justify-content: center;
@@ -83,6 +87,7 @@ aside {
   flex-direction: column;
   align-items: center;
   margin: 0.5em;
+  padding-top: 0.5em;
 }
 .card p {
   text-align: center;
@@ -90,4 +95,49 @@ aside {
 .card img {
   max-width: 50vh;
   max-height: 20vh;
+  border: 0px solid transparent;
+  border-radius: 25%;
+}
+.active {
+  background-color: whitesmoke;
+  cursor: pointer;
+  border: 0px solid whitesmoke;
+  border-radius: 0.5em;
+}
+
+#infosActor img,
+.movieCard img {
+  max-width: 10vw;
+  margin: auto;
+  align-items: center;
+  border: 0px solid transparent;
+  border-radius: 25%;
+  margin-top: 1em;
+}
+
+#infosActor p,
+#infosActor h2 {
+  text-align: center;
+  margin: 0.5em;
+}
+#infosActor {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.movieCard {
+  display: flex;
+  margin: 0.5em;
+}
+.infosFilm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-inline: 0.2em;
+}
+.infosFilm span {
+  font-weight: bold;
+  font-size: large;
 }
