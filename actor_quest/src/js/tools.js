@@ -1,5 +1,6 @@
 import { URL_API } from "./env.js";
 import { TOKEN } from "./env.js";
+import createCard from "./card.js";
 
 export default function replaceSpace(str) {
   return str.replace(/ /g, "%20");
@@ -7,7 +8,8 @@ export default function replaceSpace(str) {
 
 export function storeInLocalstorage(actor) {
   let histo = JSON.parse(localStorage.getItem("histoActor")) || [];
-  if (!histo.includes(actor)) {
+  const idActor = histo.some(({ id }) => id === actor.id);
+  if (!idActor) {
     histo.push(actor);
     localStorage.setItem("histoActor", JSON.stringify(histo));
     console.log("actor is pack in histoActor in the local Storage");
@@ -106,24 +108,45 @@ export function showMovies(movies) {
     movieCard.appendChild(innerMovieCard);
     moviesContainer.appendChild(movieCard);
 
-    movieCard.addEventListener("click", () => {
+    let id_movie = movies[i].id;
+    movieCard.addEventListener("click", async () => {
       addActiveClass(movieCard);
       showActorslist(id_movie);
     });
   }
 }
 
-function showActorslist(id_movie) {
-  const actorsContainer = document.querySelector("#actors");
-  actorsContainer.innerHTML = "";
+async function getActorslist(id_movie) {
   const requestOptions = {
     method: "GET",
     redirect: "follow",
   };
-  fetch(
-    `${URL_API}movie/${id_movie}/credits?api_key=${TOKEN}`,
+  const data = await fetch(
+    `https://api.themoviedb.org/3/movie/10000/credits?api_key=${TOKEN}`,
     requestOptions
-  ).then((response) => response.json());
+  )
+    .then((response) => response.json())
+    .then((data) => {
+      return data.cast;
+    })
+    .catch((error) => console.error(error));
+  console.log("data dans getActorslist:" + data);
+  return data;
+}
+
+async function showActorslist(id_movie) {
+  const res = document.getElementById("res");
+  res.innerHTML = "";
+  const ats = await getActorslist(id_movie);
+  console.log(ats);
+  for (const at of ats) {
+    const name = at.name;
+    const image = at.profile_path;
+    const id = at.id;
+    const card = createCard(id, name, image);
+    const res = document.getElementById("res");
+    res.appendChild(card);
+  }
 }
 
 // fonctions pour l'historique
