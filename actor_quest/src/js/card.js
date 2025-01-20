@@ -1,5 +1,4 @@
-import { addActiveClass, getDetails, removeActiveClass } from "./tools.js";
-import { showDetails, getMovies, showMovies } from "./tools.js";
+import * as tools from "./tools.js";
 
 function createCard(id, name, image) {
   let card = document.createElement("div");
@@ -19,12 +18,12 @@ function createCard(id, name, image) {
   card.appendChild(p);
 
   card.addEventListener("click", async () => {
-    const detailActor = await getDetails(id);
-    showDetails(detailActor);
-    removeActiveClass();
-    addActiveClass(card);
-    const listMovies = await getMovies(id);
-    showMovies(listMovies);
+    const detailActor = await tools.getDetails(id);
+    tools.showDetails(detailActor);
+    tools.removeActiveClass();
+    tools.addActiveClass(card);
+    const listMovies = await tools.getMovies(id);
+    tools.showMovies(listMovies);
   });
   return card;
 }

@@ -2,7 +2,7 @@ import { URL_API } from "./env.js";
 import { TOKEN } from "./env.js";
 import { createCard, createLi } from "./card.js";
 
-export default function replaceSpace(str) {
+export function replaceSpace(str) {
   return str.replace(/ /g, "%20");
 }
 
@@ -114,7 +114,7 @@ export function showMovies(movies) {
   }
 }
 
-async function getActorslist(id_movie) {
+export async function getActorslist(id_movie) {
   const requestOptions = {
     method: "GET",
     redirect: "follow",
@@ -131,7 +131,7 @@ async function getActorslist(id_movie) {
   return data;
 }
 
-async function showActorslist(id_movie) {
+export async function showActorslist(id_movie) {
   const res = document.getElementById("res");
   res.innerHTML = "";
   const ats = await getActorslist(id_movie);
@@ -147,8 +147,9 @@ async function showActorslist(id_movie) {
 }
 
 // fonctions pour l'historique
-function showHisto(listActors) {
+export function showHisto(listActors) {
   const histo = document.querySelector("#histo");
+  histo.innerHTML = "";
   const ul = document.createElement("ul");
   histo.appendChild(ul);
   for (const actor of listActors) {
