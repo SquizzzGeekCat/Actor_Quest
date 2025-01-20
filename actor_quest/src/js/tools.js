@@ -6,10 +6,10 @@ export default function replaceSpace(str) {
 }
 
 export function storeInLocalstorage(actor) {
-  let histoClique = JSON.parse(localStorage.getItem("histoActor")) || [];
-  if (!histoClique.includes(actor)) {
-    histoClique.push(actor);
-    localStorage.setItem("histoActor", JSON.stringify(histoClique));
+  let histo = JSON.parse(localStorage.getItem("histoActor")) || [];
+  if (!histo.includes(actor)) {
+    histo.push(actor);
+    localStorage.setItem("histoActor", JSON.stringify(histo));
     console.log("actor is pack in histoActor in the local Storage");
   } else {
     console.log("actor is already in histoActor in the local Storage");
@@ -26,6 +26,10 @@ export function getFromLocalstorage() {
   } else {
     return null;
   }
+}
+
+export function removeFromLocalstorage() {
+  localStorage.removeItem("histoActor");
 }
 
 export function getDetails(id) {
@@ -78,22 +82,51 @@ export async function getMovies(id) {
 }
 
 export function showMovies(movies) {
-  console.log("type of movies : ", typeof movies);
+  movies.sort(function (a, b) {
+    return new Date(b.release_date) - new Date(a.release_date);
+  });
+
   const moviesContainer = document.querySelector("#movies");
-  moviesContainer.innerHTML = "";
+  moviesContainer.replaceChildren();
   for (let i = 0; i < movies.length; i++) {
-    console.log(movies[i]);
-    moviesContainer.innerHTML += `
-    <div class="movieCard">
-      <img src="https://image.tmdb.org/t/p/w200${movies[i].poster_path}" alt="${movies[i].title}">
-      <div class="infosFilm">
-        <span>${movies[i].title}</span>
-        <p>${movies[i].release_date}</p>
-      </div>
-    </div>`;
+    let movieCard = document.createElement("div");
+    movieCard.classList.add("movieCard");
+    let imageMovieCard = document.createElement("img");
+    imageMovieCard.src = `https://image.tmdb.org/t/p/w200${movies[i].poster_path}`;
+    imageMovieCard.alt = movies[i].title;
+    let innerMovieCard = document.createElement("div");
+    innerMovieCard.classList.add("innerMovieCard");
+    let titleMovieCard = document.createElement("span");
+    titleMovieCard.textContent = movies[i].title;
+    let dateMovieCard = document.createElement("p");
+    dateMovieCard.textContent = movies[i].release_date;
+    innerMovieCard.appendChild(titleMovieCard);
+    innerMovieCard.appendChild(dateMovieCard);
+    movieCard.appendChild(imageMovieCard);
+    movieCard.appendChild(innerMovieCard);
+    moviesContainer.appendChild(movieCard);
+
+    movieCard.addEventListener("click", () => {
+      addActiveClass(movieCard);
+      showActorslist(id_movie);
+    });
   }
 }
 
+function showActorslist(id_movie) {
+  const actorsContainer = document.querySelector("#actors");
+  actorsContainer.innerHTML = "";
+  const requestOptions = {
+    method: "GET",
+    redirect: "follow",
+  };
+  fetch(
+    `${URL_API}movie/${id_movie}/credits?api_key=${TOKEN}`,
+    requestOptions
+  ).then((response) => response.json());
+}
+
+// fonctions pour l'historique
 function showHisto(actor) {
   const histo = document.querySelector("#histo");
   histo.innerHTML += `
