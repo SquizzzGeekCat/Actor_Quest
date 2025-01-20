@@ -1,12 +1,7 @@
-import {
-  addActiveClass,
-  getDetails,
-  removeActiveClass,
-  storeInLocalstorage,
-} from "./tools.js";
+import { addActiveClass, getDetails, removeActiveClass } from "./tools.js";
 import { showDetails, getMovies, showMovies } from "./tools.js";
 
-export default function createCard(id, name, image) {
+function createCard(id, name, image) {
   let card = document.createElement("div");
   card.classList.add("card");
 
@@ -33,3 +28,12 @@ export default function createCard(id, name, image) {
   });
   return card;
 }
+
+function createLi(name) {
+  const li = document.createElement("li");
+  li.classList = "";
+  li.textContent = name;
+  return li;
+}
+
+export { createCard, createLi };

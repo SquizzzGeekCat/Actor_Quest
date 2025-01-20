@@ -1,5 +1,5 @@
 //Do something
-import createCard from "./card.js";
+import { createCard } from "./card.js";
 import connectApi from "./connect_api.js";
 
 const buttonSearch = document.querySelector("button");

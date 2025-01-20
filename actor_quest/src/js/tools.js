@@ -1,6 +1,6 @@
 import { URL_API } from "./env.js";
 import { TOKEN } from "./env.js";
-import createCard from "./card.js";
+import { createCard, createLi } from "./card.js";
 
 export default function replaceSpace(str) {
   return str.replace(/ /g, "%20");
@@ -22,9 +22,7 @@ export function getFromLocalstorage() {
   const actors = localStorage.getItem("histoActor");
   if (actors) {
     const listActors = JSON.parse(actors);
-    listActors.forEach((actor) => {
-      showHisto(actor);
-    });
+    showHisto(listActors);
   } else {
     return null;
   }
@@ -122,7 +120,7 @@ async function getActorslist(id_movie) {
     redirect: "follow",
   };
   const data = await fetch(
-    `https://api.themoviedb.org/3/movie/10000/credits?api_key=${TOKEN}`,
+    `${URL_API}movie/${id_movie}/credits?api_key=${TOKEN}`,
     requestOptions
   )
     .then((response) => response.json())
@@ -130,7 +128,6 @@ async function getActorslist(id_movie) {
       return data.cast;
     })
     .catch((error) => console.error(error));
-  console.log("data dans getActorslist:" + data);
   return data;
 }
 
@@ -150,10 +147,12 @@ async function showActorslist(id_movie) {
 }
 
 // fonctions pour l'historique
-function showHisto(actor) {
+function showHisto(listActors) {
   const histo = document.querySelector("#histo");
-  histo.innerHTML += `
-  <div class="histoActor">
-    <p>${actor.name}</p>
-  </div>`;
+  const ul = document.createElement("ul");
+  histo.appendChild(ul);
+  for (const actor of listActors) {
+    const li = createLi(actor.name);
+    ul.appendChild(li);
+  }
 }
