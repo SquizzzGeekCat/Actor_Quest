@@ -1,35 +1,10 @@
 import { URL_API } from "./env.js";
 import { TOKEN } from "./env.js";
-import { createCard, createLi } from "./card.js";
+import * as store from "./storage.js";
+import * as elt from "./elements.js";
 
 export function replaceSpace(str) {
   return str.replace(/ /g, "%20");
-}
-
-export function storeInLocalstorage(actor) {
-  let histo = JSON.parse(localStorage.getItem("histoActor")) || [];
-  const idActor = histo.some(({ id }) => id === actor.id);
-  if (!idActor) {
-    histo.push(actor);
-    localStorage.setItem("histoActor", JSON.stringify(histo));
-    console.log("actor is pack in histoActor in the local Storage");
-  } else {
-    console.log("actor is already in histoActor in the local Storage");
-  }
-}
-
-export function getFromLocalstorage() {
-  const actors = localStorage.getItem("histoActor");
-  if (actors) {
-    const listActors = JSON.parse(actors);
-    showHisto(listActors);
-  } else {
-    return null;
-  }
-}
-
-export function removeFromLocalstorage() {
-  localStorage.removeItem("histoActor");
 }
 
 export function getDetails(id) {
@@ -52,8 +27,8 @@ export function showDetails(actor) {
     <p>${actor.place_of_birth}</p>
     <p>${actor.biography}</p>
     </div>`;
-  storeInLocalstorage(actor);
-  getFromLocalstorage();
+  store.storeInLocalstorage(actor);
+  store.getFromLocalstorage();
 }
 
 export function removeActiveClass() {
@@ -88,22 +63,25 @@ export function showMovies(movies) {
 
   const moviesContainer = document.querySelector("#movies");
   moviesContainer.replaceChildren();
+
   for (let i = 0; i < movies.length; i++) {
-    let movieCard = document.createElement("div");
-    movieCard.classList.add("movieCard");
-    let imageMovieCard = document.createElement("img");
-    imageMovieCard.src = `https://image.tmdb.org/t/p/w200${movies[i].poster_path}`;
-    imageMovieCard.alt = movies[i].title;
-    let innerMovieCard = document.createElement("div");
-    innerMovieCard.classList.add("innerMovieCard");
-    let titleMovieCard = document.createElement("span");
-    titleMovieCard.textContent = movies[i].title;
-    let dateMovieCard = document.createElement("p");
-    dateMovieCard.textContent = movies[i].release_date;
-    innerMovieCard.appendChild(titleMovieCard);
-    innerMovieCard.appendChild(dateMovieCard);
-    movieCard.appendChild(imageMovieCard);
-    movieCard.appendChild(innerMovieCard);
+    let path = `https://image.tmdb.org/t/p/w200${movies[i].poster_path}`;
+    let alt = movies[i].title;
+    let titleMovie = movies[i].title;
+    let dateMovie = movies[i].release_date;
+
+    let imageMovieCard = elt.createImg({ src: path, alt: alt });
+    let titleMovieCard = elt.createH3("", "", titleMovie);
+    let dateMovieCard = elt.createP("", "", dateMovie);
+
+    let innerMovieCard = elt.createDiv("innerMovieCard", [
+      titleMovieCard,
+      dateMovieCard,
+    ]);
+    let movieCard = elt.createDiv("movieCard", [
+      imageMovieCard,
+      innerMovieCard,
+    ]);
     moviesContainer.appendChild(movieCard);
 
     let id_movie = movies[i].id;
@@ -133,27 +111,15 @@ export async function getActorslist(id_movie) {
 
 export async function showActorslist(id_movie) {
   const res = document.getElementById("res");
-  res.innerHTML = "";
+  res.replaceChildren();
   const ats = await getActorslist(id_movie);
   console.log(ats);
   for (const at of ats) {
     const name = at.name;
     const image = at.profile_path;
     const id = at.id;
-    const card = createCard(id, name, image);
+    const card = elt.createCard(id, name, image);
     const res = document.getElementById("res");
     res.appendChild(card);
-  }
-}
-
-// fonctions pour l'historique
-export function showHisto(listActors) {
-  const histo = document.querySelector("#histo");
-  histo.innerHTML = "";
-  const ul = document.createElement("ul");
-  histo.appendChild(ul);
-  for (const actor of listActors) {
-    const li = createLi(actor.name);
-    ul.appendChild(li);
   }
 }

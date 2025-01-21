@@ -1,14 +1,15 @@
 //Do something
-import { createCard } from "./card.js";
+import * as elt from "./elements.js";
 import * as api from "./connect_api.js";
 import * as tools from "./tools.js";
+import * as store from "./storage.js";
 
 window.onload = () => {
   const historic = localStorage.getItem("histoActor");
   const histo = document.getElementById("histo");
   if (historic) {
     histo.innerHTML = "";
-    tools.getFromLocalstorage();
+    store.getFromLocalstorage();
   }
 };
 
@@ -25,7 +26,7 @@ buttonSearch.addEventListener("click", () => {
       const name = actor.name;
       const image = actor.profile_path;
       const id = actor.id;
-      const card = createCard(id, name, image);
+      const card = elt.createCard(id, name, image);
       const res = document.getElementById("res");
       res.appendChild(card);
     }
