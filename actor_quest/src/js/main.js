@@ -1,7 +1,6 @@
 //Do something
 import * as elt from "./elements.js";
 import * as api from "./connect_api.js";
-import * as tools from "./tools.js";
 import * as store from "./storage.js";
 
 window.onload = () => {

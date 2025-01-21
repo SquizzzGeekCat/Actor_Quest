@@ -29,10 +29,7 @@ function createCard(id, name, image) {
 }
 
 function createLi(classlist, name) {
-  const li = document.createElement("li");
-  li.classList = classlist;
-  li.textContent = name;
-  return li;
+  return createBaliseHtml("li", { class: classlist }, [], name);
 }
 
 function createDiv(classname, children) {
@@ -64,6 +61,22 @@ function createH2(id, classname, content) {
 function createH3(id, classname, content) {
   return createBaliseHtml("h3", { id: id, class: classname }, [], content);
 }
+
+function createButton(attributes, content) {
+  const btn = document.createElement("button");
+  for (const key in attributes) {
+    btn.setAttribute(key, attributes[key]);
+  }
+  if (!attributes.type) {
+    btn.setAttribute("type", "button");
+  }
+  // Créer un nœud de texte
+  const textNode = document.createTextNode(content);
+
+  // Ajouter le nœud de texte à l'élément <button>
+  btn.appendChild(textNode);
+  return btn;
+}
 function createBaliseHtml(balise, attributes, children, content) {
   const elt = document.createElement(balise);
 
@@ -90,4 +103,5 @@ export {
   createH3,
   createImg,
   createP,
+  createButton,
 };
