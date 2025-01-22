@@ -6,7 +6,7 @@ export function connectApi(searchFor) {
   const query = tools.replaceSpace(searchFor);
   const requestOptions = {
     method: "GET",
-    redirect: "follow",
+    redirect: "follow"
   };
 
   return fetch(
@@ -22,3 +22,11 @@ export function connectApi(searchFor) {
     })
     .catch((error) => console.error(error));
 }
+
+//TODO: rajouter filtre nom
+// .then((data) => {
+//   const actorFilter = data.results.filter((actor) => {
+//     console.log("nom de l'acteur" + actor.name);
+
+//     return actor.name.toLowerCase() === searchFor.toLowerCase();
+//   });

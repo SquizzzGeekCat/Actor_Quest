@@ -10,7 +10,7 @@ export function replaceSpace(str) {
 export function getDetails(id) {
   const requestOptions = {
     method: "GET",
-    redirect: "follow",
+    redirect: "follow"
   };
   return fetch(`${URL_API}person/${id}?api_key=${TOKEN}`, requestOptions)
     .then((response) => response.json())
@@ -31,6 +31,7 @@ export function showDetails(actor) {
   store.getFromLocalstorage();
 }
 
+// fonction de design
 export function removeActiveClass() {
   const cards = document.querySelectorAll(".card");
   cards.forEach((card) => card.classList.remove("active"));
@@ -40,10 +41,11 @@ export function addActiveClass(card) {
   card.classList.add("active");
 }
 
+// fonctions pour recupere et traiter les films
 export async function getMovies(id) {
   const requestOptions = {
     method: "GET",
-    redirect: "follow",
+    redirect: "follow"
   };
 
   const data = await fetch(
@@ -123,3 +125,9 @@ export async function showActorslist(id_movie) {
     res.appendChild(card);
   }
 }
+
+// fonctions pour la recherche
+//TODO: amélioré la recherche avec input sup et requete sup et posibilité sup
+
+// fonctions des options
+//TODO: traiter les options - pagination - clique sur films pour affichage du cast acteurs - recherche
