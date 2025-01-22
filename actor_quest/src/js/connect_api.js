@@ -1,9 +1,9 @@
 import { TOKEN } from "./env.js";
 import { URL_API } from "./env.js";
-import replaceSpace from "./tools.js";
+import * as tools from "./tools.js";
 
-export default function connectApi(searchFor) {
-  const query = replaceSpace(searchFor);
+export function connectApi(searchFor) {
+  const query = tools.replaceSpace(searchFor);
   const requestOptions = {
     method: "GET",
     redirect: "follow"
@@ -18,7 +18,6 @@ export default function connectApi(searchFor) {
       const actorFilter = data.results.filter((actor) => {
         return actor.known_for_department === "Acting";
       });
-      console.log(actorFilter);
       return actorFilter;
     })
     .catch((error) => console.error(error));

@@ -1,64 +1,12 @@
 import { URL_API } from "./env.js";
 import { TOKEN } from "./env.js";
+import * as store from "./storage.js";
+import * as elt from "./elements.js";
 
-//fonctions pour transformer entrer user en string utilisable dans l'URL
-export default function replaceSpace(str) {
+export function replaceSpace(str) {
   return str.replace(/ /g, "%20");
 }
-// functions de local storage
-export function storeInLocalstorage(actor) {
-  let histo = JSON.parse(localStorage.getItem("histoActor")) || [];
-  if (histo.length > 0) {
-    for (let i = 0; i < histo.length; i++) {
-      if (histo[i].name === actor.name) {
-        console.log("actor is ALREADY added to local storage");
-        return;
-      } else {
-        histo.push(actor);
-        localStorage.setItem("histoActor", JSON.stringify(histo));
-        console.log("actor is ADDED in the local Storage");
-        return;
-      }
-    }
-  } else {
-    histo.push(actor);
-    localStorage.setItem("histoActor", JSON.stringify(histo));
-    console.log("actor is ADDED in the local Storage");
-    return;
-  }
-}
 
-export function getFromLocalstorage() {
-  document.querySelector("#histo ul").innerHTML = "";
-  const actors = localStorage.getItem("histoActor");
-  if (actors) {
-    const listActors = JSON.parse(actors);
-    listActors.forEach((actor) => {
-      showHisto(actor);
-    });
-  } else {
-    return null;
-  }
-}
-//TODO: a placer lors du chargement de la page
-export function chargeHisto() {
-  const actors = localStorage.getItem("histoActor");
-  if (actors) {
-    const listActors = JSON.parse(actors);
-    listActors.forEach((actor) => {
-      showHisto(actor);
-    });
-  } else {
-    return null;
-  }
-}
-//function qui supprime l'historique de nav de l'app
-export function removeHisto() {
-  localStorage.removeItem("histoActor");
-  document.querySelector("#histo ul").innerHTML = "";
-}
-
-// fonctions pour recupere les details des acteurs
 export function getDetails(id) {
   const requestOptions = {
     method: "GET",
@@ -79,8 +27,8 @@ export function showDetails(actor) {
     <p>${actor.place_of_birth}</p>
     <p>${actor.biography}</p>
     </div>`;
-  storeInLocalstorage(actor);
-  getFromLocalstorage();
+  store.storeInLocalstorage(actor);
+  store.getFromLocalstorage();
 }
 
 // fonction de design
@@ -111,34 +59,71 @@ export async function getMovies(id) {
 }
 
 export function showMovies(movies) {
+  movies.sort(function (a, b) {
+    return new Date(b.release_date) - new Date(a.release_date);
+  });
+
   const moviesContainer = document.querySelector("#movies");
-  moviesContainer.innerHTML = "";
+  moviesContainer.replaceChildren();
+
   for (let i = 0; i < movies.length; i++) {
-    moviesContainer.innerHTML += `
-    <div class="movieCard">
-      <img src="https://image.tmdb.org/t/p/w200${movies[i].poster_path}" alt="${movies[i].title}">
-      <div class="infosFilm">
-        <span>${movies[i].title}</span>
-        <p>${movies[i].release_date}</p>
-      </div>
-    </div>`;
+    let path = `https://image.tmdb.org/t/p/w200${movies[i].poster_path}`;
+    let alt = movies[i].title;
+    let titleMovie = movies[i].title;
+    let dateMovie = movies[i].release_date;
+
+    let imageMovieCard = elt.createImg({ src: path, alt: alt });
+    let titleMovieCard = elt.createH3("", "", titleMovie);
+    let dateMovieCard = elt.createP("", "", dateMovie);
+
+    let innerMovieCard = elt.createDiv("innerMovieCard", [
+      titleMovieCard,
+      dateMovieCard,
+    ]);
+    let movieCard = elt.createDiv("movieCard", [
+      imageMovieCard,
+      innerMovieCard,
+    ]);
+    moviesContainer.appendChild(movieCard);
+
+    let id_movie = movies[i].id;
+    movieCard.addEventListener("click", async () => {
+      addActiveClass(movieCard);
+      showActorslist(id_movie);
+    });
   }
 }
 
-// fonctions pour l'historique
-function createLi(name) {
-  const li = document.createElement("li");
-  li.classList = "histolink";
-  console.log(name);
-  li.textContent = name;
-  return li;
+export async function getActorslist(id_movie) {
+  const requestOptions = {
+    method: "GET",
+    redirect: "follow",
+  };
+  const data = await fetch(
+    `${URL_API}movie/${id_movie}/credits?api_key=${TOKEN}`,
+    requestOptions
+  )
+    .then((response) => response.json())
+    .then((data) => {
+      return data.cast;
+    })
+    .catch((error) => console.error(error));
+  return data;
 }
-function showHisto(actor) {
-  const histo = document.querySelector("#listActorsInHistorique");
-  const li = createLi(actor.name);
-  console.log(li);
-  console.log(histo);
-  histo.appendChild(li);
+
+export async function showActorslist(id_movie) {
+  const res = document.getElementById("res");
+  res.replaceChildren();
+  const ats = await getActorslist(id_movie);
+  console.log(ats);
+  for (const at of ats) {
+    const name = at.name;
+    const image = at.profile_path;
+    const id = at.id;
+    const card = elt.createCard(id, name, image);
+    const res = document.getElementById("res");
+    res.appendChild(card);
+  }
 }
 
 // fonctions pour la recherche

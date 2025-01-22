@@ -2,20 +2,24 @@ body {
   padding: 0em;
   margin: 0em;
 }
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+li {
+  padding-inline: 0.5em;
+  margin: 0.5em;
+}
 main {
   display: grid;
-  width: 100%;
+  width: 99vw;
   grid-template-areas:
-    "search search show show likes"
-    "res res show show likes"
-    "res res movies movies likes"
-    "histo histo movies movies likes"
-    "histo histo movies movies likes";
-
-  /* TODO: changer taille des section par taille de la grid template row et col */
-  grid-template-columns: repeat(30vw, 1fr);
-  grid-template-rows: repeat(30vh, 1fr);
+    "search search search search search"
+    "res res show movies histo"
+    "res res show movies likes";
   gap: 1em;
+  grid-column: 1fr 1fr 1fr 1fr;
   justify-items: center;
   justify-content: center;
 }
@@ -32,9 +36,6 @@ footer {
   margin-top: 0.5em;
 }
 section {
-  width: 30vw;
-  min-height: 3em;
-  max-height: 50vh;
   overflow: auto;
 }
 /* Rend le scroll discret pour les navigateurs basés sur WebKit */
@@ -61,28 +62,42 @@ aside {
 #res {
   grid-area: res;
   background-color: lightpink;
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  overflow: auto;
+  max-height: 70vh;
+  justify-items: stretch;
 }
 #movies {
   grid-area: movies;
   background-color: lightyellow;
+  overflow: auto;
+  max-height: 70vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
 }
 #histo {
   grid-area: histo;
   background-color: lightblue;
+  overflow: auto;
+  max-height: 70vh;
 }
 #show {
   grid-area: show;
   background-color: lightgreen;
+  overflow: auto;
+  max-height: 70vh;
+  max-width: 20vw;
 }
 #likes {
   grid-area: likes;
   background-color: lightgray;
+  overflow: auto;
+  max-height: 70vh;
 }
 .card {
   width: 10vw;
+  height: 25vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -129,6 +144,13 @@ aside {
 .movieCard {
   display: flex;
   margin: 0.5em;
+  align-items: center;
+}
+.movieCard img {
+  max-width: 7vw;
+  margin: auto;
+  border: 0px solid transparent;
+  border-radius: 25%;
 }
 .infosFilm {
   display: flex;
